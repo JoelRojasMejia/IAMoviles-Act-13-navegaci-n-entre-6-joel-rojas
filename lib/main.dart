@@ -1,7 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:myapp/widgets/ropa.dart';
 import 'package:myapp/widgets/joyeria.dart';
+import 'package:myapp/widgets/calzado.dart';
+import 'package:myapp/widgets/accesorios.dart';
 
 // =============================================================================
 // I. IMPORTS Y CONSTANTES GLOBALES
@@ -81,82 +85,132 @@ class CartModel extends ChangeNotifier {
 class ProductCatalogModel extends ChangeNotifier {
   final List<Product> _clothingProducts;
   final List<Product> _jewelryProducts;
+  final List<Product> _footwearProducts;
+  final List<Product> _accessoriesProducts;
 
   // Initialize with sample data
   ProductCatalogModel()
-    : _clothingProducts = <Product>[
-        const Product(
-          id: 'c1',
-          name: "Chaqueta Louis Vuitton",
-          price: 70000.00,
-          iconData: Icons.checkroom,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/1600817327622_bulletin.jfif",
-        ),
-        const Product(
-          id: 'c2',
-          name: "Sudadera Balenciaga x GAP",
-          price: 599.99,
-          iconData: Icons.checkroom,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/S2a0ec9070a4344b5aab0a759de0d5978g.webp",
-        ),
-        const Product(
-          id: 'c3',
-          name: "Pantalon JNCO",
-          price: 499.99,
-          iconData: Icons.checkroom,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/4096_d5a3e695-2a5f-4853-acd5-c92f0b502bd9.jpg",
-        ),
-        const Product(
-          id: 'c4',
-          name: "Chaqueta Cazadora Balenciaga",
-          price: 4500.00,
-          iconData: Icons.checkroom,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/866531TQM111000_X.jpg",
-        ),
-      ],
-      _jewelryProducts = <Product>[
-        const Product(
-          id: 'j1',
-          name: "Pulsera Chrome Hearts",
-          price: 120.00,
-          iconData: Icons.diamond,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/s-l1200.jpg",
-        ),
-        const Product(
-          id: 'j2',
-          name: "Aretes Chrome Hearts",
-          price: 45.50,
-          iconData: Icons.diamond,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/D_Q_NP_668344-MLM87550490500_072025-O.webp",
-        ),
-        const Product(
-          id: 'j3',
-          name: "Esclava Chrome Hearts",
-          price: 899.99,
-          iconData: Icons.diamond,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/images.jfif",
-        ),
-        const Product(
-          id: 'j4',
-          name: "Anillo Chrome Hearts",
-          price: 75.25,
-          iconData: Icons.diamond,
-          imageUrl:
-              "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/images%20(1).jfif",
-        ),
-      ];
+      : _clothingProducts = <Product>[
+          const Product(
+            id: 'c1',
+            name: "Chaqueta Louis Vuitton",
+            price: 70000.00,
+            iconData: Icons.checkroom,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/1600817327622_bulletin.jfif",
+          ),
+          const Product(
+            id: 'c2',
+            name: "Sudadera Balenciaga x GAP",
+            price: 599.99,
+            iconData: Icons.checkroom,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/S2a0ec9070a4344b5aab0a759de0d5978g.webp",
+          ),
+          const Product(
+            id: 'c3',
+            name: "Pantalon JNCO",
+            price: 499.99,
+            iconData: Icons.checkroom,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/4096_d5a3e695-2a5f-4853-acd5-c92f0b502bd9.jpg",
+          ),
+          const Product(
+            id: 'c4',
+            name: "Chaqueta Cazadora Balenciaga",
+            price: 4500.00,
+            iconData: Icons.checkroom,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/866531TQM111000_X.jpg",
+          ),
+        ],
+        _jewelryProducts = <Product>[
+          const Product(
+            id: 'j1',
+            name: "Pulsera Chrome Hearts",
+            price: 120.00,
+            iconData: Icons.diamond,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/s-l1200.jpg",
+          ),
+          const Product(
+            id: 'j2',
+            name: "Aretes Chrome Hearts",
+            price: 45.50,
+            iconData: Icons.diamond,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/D_Q_NP_668344-MLM87550490500_072025-O.webp",
+          ),
+          const Product(
+            id: 'j3',
+            name: "Esclava Chrome Hearts",
+            price: 899.99,
+            iconData: Icons.diamond,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/images.jfif",
+          ),
+          const Product(
+            id: 'j4',
+            name: "Anillo Chrome Hearts",
+            price: 75.25,
+            iconData: Icons.diamond,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/images%20(1).jfif",
+          ),
+        ],
+        _footwearProducts = <Product>[
+          const Product(
+            id: 'f1',
+            name: "Timberland X Louis Vuiitton",
+            price: 1500.00,
+            iconData: Icons.ice_skating,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/Louis_Vuitton_Timberland_622_Ankle_Boot_Black_1AD75A_Hype_Clothinga_Limited_Edition.001-thumbnail-1080x1080-70.jpeg",
+          ),
+          const Product(
+            id: 'f2',
+            name: "Nike SB Dunk Low Pro QS",
+            price: 200.00,
+            iconData: Icons.ice_skating,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/stock_nike-sb-dunk-low-pro-qs-neckface-24-11-2022-00-36-35.jpeg",
+          ),
+          const Product(
+            id: 'f3',
+            name: "Nike Air Force 1 High Billie Eilish",
+            price: 3500.00,
+            iconData: Icons.ice_skating,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/Capturadepantalla2023-06-24ala_s_12.16.07.webp",
+          ),
+        ],
+        _accessoriesProducts = <Product>[
+          const Product(
+            id: 'a1',
+            name: "Gorra Balenciaga",
+            price: 300.00,
+            iconData: Icons.watch,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/32300482_62382768_1000.webp",
+          ),
+          const Product(
+            id: 'a2',
+            name: "Lentes Chrome Hearts",
+            price: 800.00,
+            iconData: Icons.watch,
+            imageUrl:
+                "https://raw.githubusercontent.com/JoelRojasMejia/imagenes/refs/heads/main/D_NQ_NP_822687-MLM84145427928_052025-O.webp"
+          ),
+        ];
 
   List<Product> get clothingProducts =>
       List<Product>.unmodifiable(_clothingProducts);
   List<Product> get jewelryProducts =>
       List<Product>.unmodifiable(_jewelryProducts);
+  List<Product> get footwearProducts =>
+      List<Product>.unmodifiable(_footwearProducts);
+  List<Product> get accessoriesProducts =>
+      List<Product>.unmodifiable(_accessoriesProducts);
 
   void _addClothingProduct(Product product) {
     _clothingProducts.add(product);
@@ -165,6 +219,16 @@ class ProductCatalogModel extends ChangeNotifier {
 
   void _addJewelryProduct(Product product) {
     _jewelryProducts.add(product);
+    notifyListeners();
+  }
+
+  void _addFootwearProduct(Product product) {
+    _footwearProducts.add(product);
+    notifyListeners();
+  }
+
+  void _addAccessoryProduct(Product product) {
+    _accessoriesProducts.add(product);
     notifyListeners();
   }
 
@@ -199,6 +263,24 @@ class ProductCatalogModel extends ChangeNotifier {
         imageUrl: imageUrl,
       );
       _addJewelryProduct(newProduct);
+    } else if (category == 'Calzado') {
+      newProduct = Product(
+        id: _generateUniqueId('f'),
+        name: name,
+        price: price,
+        iconData: Icons.ice_skating,
+        imageUrl: imageUrl,
+      );
+      _addFootwearProduct(newProduct);
+    } else if (category == 'Accesorios') {
+      newProduct = Product(
+        id: _generateUniqueId('a'),
+        name: name,
+        price: price,
+        iconData: Icons.watch,
+        imageUrl: imageUrl,
+      );
+      _addAccessoryProduct(newProduct);
     }
   }
 }
@@ -244,12 +326,16 @@ class CustomDrawer extends StatelessWidget {
   final VoidCallback onGoToHome;
   final VoidCallback onGoToClothing;
   final VoidCallback onGoToJewelry;
+  final VoidCallback onGoToFootwear;
+  final VoidCallback onGoToAccessories;
 
   const CustomDrawer({
     super.key,
     required this.onGoToHome,
     required this.onGoToClothing,
     required this.onGoToJewelry,
+    required this.onGoToFootwear,
+    required this.onGoToAccessories,
   });
 
   @override
@@ -287,19 +373,13 @@ class CustomDrawer extends StatelessWidget {
             context,
             Icons.ice_skating,
             "Calzado",
-            onTapCallback: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Categoría 'Calzado' próximamente")),
-            ),
+            onTapCallback: onGoToFootwear,
           ),
           _drawerItem(
             context,
             Icons.watch,
             "Accesorios",
-            onTapCallback: () => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text("Categoría 'Accesorios' próximamente"),
-              ),
-            ),
+            onTapCallback: onGoToAccessories,
           ),
           const Divider(),
           _drawerItem(
@@ -509,7 +589,7 @@ class _MainShoppingAppState extends State<MainShoppingApp>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
   }
 
   @override
@@ -535,6 +615,8 @@ class _MainShoppingAppState extends State<MainShoppingApp>
         onGoToHome: () => _tabController.animateTo(0),
         onGoToClothing: () => _tabController.animateTo(1),
         onGoToJewelry: () => _tabController.animateTo(2),
+        onGoToFootwear: () => _tabController.animateTo(3),
+        onGoToAccessories: () => _tabController.animateTo(4),
       ),
       body: TabBarView(
         controller: _tabController,
@@ -542,9 +624,13 @@ class _MainShoppingAppState extends State<MainShoppingApp>
           HomePageContent(
             onGoToClothing: () => _tabController.animateTo(1),
             onGoToJewelry: () => _tabController.animateTo(2),
+            onGoToFootwear: () => _tabController.animateTo(3),
+            onGoToAccessories: () => _tabController.animateTo(4),
           ),
           const ClothingPageContent(),
           const JewelryPageContent(),
+          const FootwearPageContent(),
+          const AccessoriesPageContent(),
         ],
       ),
       bottomNavigationBar: TabBar(
@@ -556,6 +642,8 @@ class _MainShoppingAppState extends State<MainShoppingApp>
           Tab(icon: Icon(Icons.home), text: "Inicio"),
           Tab(icon: Icon(Icons.checkroom), text: "Ropa"),
           Tab(icon: Icon(Icons.diamond), text: "Joyería"),
+          Tab(icon: Icon(Icons.ice_skating), text: "Calzado"),
+          Tab(icon: Icon(Icons.watch), text: "Accesorios"),
         ],
       ),
     );
@@ -566,11 +654,15 @@ class _MainShoppingAppState extends State<MainShoppingApp>
 class HomePageContent extends StatelessWidget {
   final VoidCallback onGoToClothing;
   final VoidCallback onGoToJewelry;
+  final VoidCallback onGoToFootwear;
+  final VoidCallback onGoToAccessories;
 
   const HomePageContent({
     super.key,
     required this.onGoToClothing,
     required this.onGoToJewelry,
+    required this.onGoToFootwear,
+    required this.onGoToAccessories,
   });
 
   @override
@@ -595,16 +687,17 @@ class HomePageContent extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Categoría 'Calzado' próximamente"),
-                    ),
-                  );
-                },
+                onTap: onGoToFootwear,
                 child: const CategoryItem(
                   icon: Icons.ice_skating,
                   label: "Calzado",
+                ),
+              ),
+              GestureDetector(
+                onTap: onGoToAccessories,
+                child: const CategoryItem(
+                  icon: Icons.watch,
+                  label: "Accesorios",
                 ),
               ),
             ],
@@ -708,13 +801,15 @@ class CartPage extends StatelessWidget {
         ),
         onGoToClothing: () {
           Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-          // If MainShoppingApp were to expose its TabController, we'd navigate to tab 1
-          // For now, simply navigate to root. User can then choose tab.
         },
         onGoToJewelry: () {
           Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-          // If MainShoppingApp were to expose its TabController, we'd navigate to tab 2
-          // For now, simply navigate to root. User can then choose tab.
+        },
+        onGoToFootwear: () {
+          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+        },
+        onGoToAccessories: () {
+          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
         },
       ),
       body: Consumer<CartModel>(
@@ -918,25 +1013,38 @@ class _AddProductPageState extends State<AddProductPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _imageUrlController = TextEditingController();
+  XFile? _imageFile;
   String? _selectedCategory;
-  final List<String> _categories = <String>['Ropa', 'Joyería'];
+  final List<String> _categories = <String>[
+    'Ropa',
+    'Joyería',
+    'Calzado',
+    'Accesorios'
+  ];
 
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
-    _imageUrlController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _imageFile = image;
+      });
+    }
   }
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
       final double price = double.parse(_priceController.text);
-      final String imageUrl = _imageUrlController.text.isEmpty
-          ? placeholderImageUrl
-          : _imageUrlController.text;
+      // TODO: Implement image upload to Firebase Storage and get URL
+      final String imageUrl = _imageFile?.path ?? placeholderImageUrl;
       final String category = _selectedCategory!;
 
       Provider.of<ProductCatalogModel>(context, listen: false).addNewProduct(
@@ -947,7 +1055,7 @@ class _AddProductPageState extends State<AddProductPage> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Producto \'$name\' agregado a $category.")),
+        SnackBar(content: Text("Producto '$name' agregado a $category.")),
       );
       Navigator.pop(context); // Go back after adding product
     }
@@ -973,11 +1081,15 @@ class _AddProductPageState extends State<AddProductPage> {
         ),
         onGoToClothing: () {
           Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-          // If MainShoppingApp were to expose its TabController, we'd navigate to tab 1
         },
         onGoToJewelry: () {
           Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
-          // If MainShoppingApp were to expose its TabController, we'd navigate to tab 2
+        },
+        onGoToFootwear: () {
+          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+        },
+        onGoToAccessories: () {
+          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
         },
       ),
       body: SingleChildScrollView(
@@ -1033,18 +1145,36 @@ class _AddProductPageState extends State<AddProductPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: InputDecoration(
-                  labelText: "URL de la Imagen (opcional)",
-                  hintText: "ej: https://example.com/image.jpg",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  prefixIcon: const Icon(Icons.link, color: mediumGrey),
+              const SizedBox(height: 20),
+              // Image preview and picker button
+              Center(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade300),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: _imageFile != null
+                          ? Image.file(File(_imageFile!.path), fit: BoxFit.cover)
+                          : const Icon(Icons.image, size: 50, color: mediumGrey),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton.icon(
+                      onPressed: _pickImage,
+                      icon: const Icon(Icons.upload_file),
+                      label: const Text("Seleccionar Imagen"),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: lightGrey,
+                          foregroundColor: mediumGrey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          )),
+                    ),
+                  ],
                 ),
-                keyboardType: TextInputType.url,
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
